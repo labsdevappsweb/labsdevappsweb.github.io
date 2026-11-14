@@ -233,7 +233,15 @@
       if (t) return t === "dark";
       return !!(window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
     }
-    function paint() { b.textContent = isDark() ? (tr() ? "Açık" : "Light") : (tr() ? "Koyu" : "Dark"); }
+    var MOON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    var SUN = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2M12 20.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1.5 12h2M20.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>';
+    function paint() {
+      var dark = isDark();
+      b.innerHTML = dark ? SUN : MOON;
+      var lbl = dark ? (tr() ? "Açık temaya geç" : "Switch to light theme") : (tr() ? "Koyu temaya geç" : "Switch to dark theme");
+      b.setAttribute("aria-label", lbl);
+      b.title = lbl;
+    }
     b.onclick = function () {
       var nt = isDark() ? "light" : "dark";
       root.setAttribute("data-theme", nt);
