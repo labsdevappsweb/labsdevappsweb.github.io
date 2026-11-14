@@ -16,7 +16,7 @@
     img.src = a.icon; img.alt = ""; img.width = 72; img.height = 72;
     var h = el("h3", null, a.name); h.setAttribute("translate", "no");
     t.appendChild(img); t.appendChild(h); c.appendChild(t);
-    var p = el("p"); bil(a.tagline_en, a.tagline_tr).forEach(function (x) { p.appendChild(x); }); c.appendChild(p);
+    c.appendChild(el("p", null, a.tagline_en));
     var ac = el("div", "ac");
     if (a.status === "live" && a.store_url) {
       var gp = el("a", "gp"); gp.href = a.store_url; gp.target = "_blank"; gp.rel = "noopener";
@@ -110,13 +110,24 @@
     var cnt = document.querySelector(".st b");
     if (cnt) cnt.textContent = data.apps.length;
     data.apps.forEach(function (a) {
-      if (grid && !grid.querySelector('img[src^="' + a.icon + '"]')) grid.appendChild(card(a));
+      if (grid && !grid.querySelector('img[src^="' + a.icon + '"]')) { grid.appendChild(card(a)); added = true; }
       var pv = document.getElementById("pv-" + a.id);
-      if (!pv && main) { main.appendChild(article(a, tpl)); PV.push(a.id); }
+      if (!pv && main) { main.appendChild(article(a, tpl)); PV.push(a.id); added = true; }
       else if (pv && a.policy_text) fillPolicy(pv.querySelector(".pb"), a, tpl);
     });
     var q = new URLSearchParams(location.search).get("privacy");
     if (q && !document.documentElement.classList.contains("pvm") && document.getElementById("pv-" + q)) route();
+    /* Panelden eklenen içerik İngilizce; Türkçe seçiliyse sayfayı Google Translate ile çevir */
+    if (added) askTr();
+  }
+  var added = false;
+  function askTr() {
+    var sel = document.getElementById("lsel");
+    if (document.documentElement.getAttribute("data-l") === "tr" && typeof gt === "function") setTimeout(function () { gt("tr"); }, 600);
+    if (sel && !sel.dataset.autoTr) {
+      sel.dataset.autoTr = "1";
+      sel.addEventListener("change", function () { if (sel.value === "tr") setTimeout(function () { gt("tr"); }, 400); });
+    }
   }
   fetch("data/apps.json?v=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.json(); }).then(run).catch(function () {});
 

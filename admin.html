@@ -120,7 +120,7 @@ function addForm(){
   c.innerHTML="<h3>Yeni uygulama ekle</h3>";
   const r1=document.createElement("div");r1.className="row";r1.append(field("Kimlik (id, küçük harf ve tire)","","n-id"),field("Ad","","n-name"));
   const r2=document.createElement("div");r2.className="row";r2.append(fileField("İkon (resim dosyası, isteğe bağlı)","n-icon"),statusSelect("live","n-status"));
-  const r3=document.createElement("div");r3.className="row";r3.append(field("Açıklama (EN)","","n-en"),field("Açıklama (TR)","","n-tr"));
+  const r3=document.createElement("div");r3.append(field("Açıklama (İngilizce)","","n-en"));
   c.append(r1,r2,field("Play Store linki","","n-store"),r3);
   const b=document.createElement("button");b.className="btn";b.textContent="Uygulamayı ekle";b.onclick=addApp;c.appendChild(b);
   return c;
@@ -143,7 +143,7 @@ function fillEdit(body){
   const a=DOC.apps.find(x=>x.id===SEL);if(!a) return;
   const r1=document.createElement("div");r1.className="row";r1.append(field("Ad",a.name,"e-name"),fileField("İkon değiştir (resim dosyası, isteğe bağlı)","e-icon"));
   const r2=document.createElement("div");r2.className="row";r2.append(statusSelect(a.status,"e-status"),field("Play Store linki",a.store_url,"e-store"));
-  const r3=document.createElement("div");r3.className="row";r3.append(field("Açıklama (EN)",a.tagline_en,"e-en"),field("Açıklama (TR)",a.tagline_tr,"e-tr"));
+  const r3=document.createElement("div");r3.append(field("Açıklama (İngilizce)",a.tagline_en,"e-en"));
   body.append(r1,r2,r3);
   const b=document.createElement("button");b.className="btn";b.textContent="Uygulamayı güncelle";b.onclick=()=>updateApp(a.id);body.appendChild(b);
   body.appendChild(policyEditor(a));
@@ -170,7 +170,7 @@ async function updateApp(id){
   const d=JSON.parse(JSON.stringify(DOC));const a=d.apps.find(x=>x.id===id);
   a.name=$("e-name").value.trim()||a.name;
   a.status=$("e-status").value;a.store_url=$("e-store").value.trim();
-  a.tagline_en=$("e-en").value;a.tagline_tr=$("e-tr").value;
+  a.tagline_en=$("e-en").value;
   try{
     const f=$("e-icon").files[0];if(f) await uploadIcon(id,f);
     await commit("Uygulama güncelle: "+a.name,d);
@@ -187,8 +187,8 @@ async function addApp(){
   try{
     if(file) await uploadIcon(id,file);
     const d=JSON.parse(JSON.stringify(DOC));
-    d.apps.push({id,name,icon:"icons/"+id+".png",tagline_en:$("n-en").value,tagline_tr:$("n-tr").value,store_url:$("n-store").value.trim(),status:$("n-status").value});
-    if(await commit("Uygulama ekle: "+name,d)){["n-id","n-name","n-store","n-en","n-tr"].forEach(x=>$(x).value="");$("n-icon").value=""}
+    d.apps.push({id,name,icon:"icons/"+id+".png",tagline_en:$("n-en").value,store_url:$("n-store").value.trim(),status:$("n-status").value});
+    if(await commit("Uygulama ekle: "+name,d)){["n-id","n-name","n-store","n-en"].forEach(x=>$(x).value="");$("n-icon").value=""}
   }catch(e){msg("Eklenemedi: "+e.message,false)}
 }
 $("go").onclick=login;
