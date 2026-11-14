@@ -66,6 +66,14 @@
       "tagline_tr": "HTML sayfalarınızı uygulamaya dönüştürün.",
       "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.webtoapp",
       "status": "live"
+    },
+    {
+      "id": "testapp",
+      "name": "Iready",
+      "icon": "icons/testapp.png",
+      "tagline_en": "Just For Test",
+      "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.bephazirlama",
+      "status": "live"
     }
   ],
   "deleted": [
