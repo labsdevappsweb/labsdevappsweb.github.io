@@ -38,11 +38,12 @@
     head.appendChild(document.createTextNode(" "));
     var m = el("a", null, "labsdevapps@gmail.com"); m.href = "mailto:labsdevapps@gmail.com"; head.appendChild(m);
     pb.appendChild(head);
-    (a.policy || tpl.sections).forEach(function (s) {
-      pb.appendChild(el("h4", null, s.h_en));
-      s.en.split("\n").filter(function (x) { return x.trim(); }).forEach(function (line) {
-        pb.appendChild(el("p", null, line.split("{app}").join(a.name)));
-      });
+    (a.policy_text || tpl.text).split(/\n\s*\n/).forEach(function (block) {
+      var lines = block.split("\n").map(function (x) { return x.trim(); }).filter(Boolean);
+      if (!lines.length) return;
+      var text = lines.join(" ").split("{app}").join(a.name);
+      var isHeading = lines.length === 1 && text.length <= 60 && !/[.!?:;]$/.test(text);
+      pb.appendChild(el(isHeading ? "h4" : "p", null, text));
     });
   }
   function article(a, tpl) {
@@ -63,7 +64,7 @@
       if (grid && !grid.querySelector('img[src="' + a.icon + '"]')) grid.appendChild(card(a));
       var pv = document.getElementById("pv-" + a.id);
       if (!pv && main) { main.appendChild(article(a, tpl)); PV.push(a.id); }
-      else if (pv && a.policy) fillPolicy(pv.querySelector(".pb"), a, tpl);
+      else if (pv && a.policy_text) fillPolicy(pv.querySelector(".pb"), a, tpl);
     });
     var q = new URLSearchParams(location.search).get("privacy");
     if (q && !document.documentElement.classList.contains("pvm") && document.getElementById("pv-" + q)) route();

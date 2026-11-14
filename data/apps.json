@@ -1,50 +1,7 @@
 {
   "policy_template": {
     "updated": "2026-11-14",
-    "sections": [
-      {
-        "h_en": "Information we collect",
-        "h_tr": "Topladığımız bilgiler",
-        "en": "{app} does not require an account, and we do not collect, sell or share your personal information on our own servers.",
-        "tr": "{app}, hesap gerektirmez; kişisel bilgilerinizi kendi sunucularımızda toplamaz, satmaz ve paylaşmayız."
-      },
-      {
-        "h_en": "Data on your device",
-        "h_tr": "Cihazınızdaki veriler",
-        "en": "Content you create, open or save in the app (such as files, settings and preferences) stays on your device.",
-        "tr": "Uygulamada oluşturduğunuz, açtığınız veya kaydettiğiniz içerikler (dosyalar, ayarlar ve tercihler gibi) cihazınızda kalır."
-      },
-      {
-        "h_en": "Ads and third-party services",
-        "h_tr": "Reklamlar ve üçüncü taraf hizmetleri",
-        "en": "Some of our apps may show ads through Google AdMob. Google may use device identifiers such as the advertising ID to serve and measure ads. See https://policies.google.com/privacy. You can reset or delete your advertising ID in your Android settings.",
-        "tr": "Bazı uygulamalarımız Google AdMob aracılığıyla reklam gösterebilir. Google, reklamları sunmak ve ölçmek için reklam kimliği gibi cihaz tanımlayıcılarını kullanabilir. Bkz. https://policies.google.com/privacy. Reklam kimliğinizi Android ayarlarından sıfırlayabilir veya silebilirsiniz."
-      },
-      {
-        "h_en": "Internet access",
-        "h_tr": "İnternet erişimi",
-        "en": "If the app loads online content, requests go directly from your device to the service that provides it. Those services have their own privacy policies.",
-        "tr": "Uygulama çevrimiçi içerik yüklüyorsa, istekler doğrudan cihazınızdan içeriği sağlayan hizmete gider. Bu hizmetlerin kendi gizlilik politikaları vardır."
-      },
-      {
-        "h_en": "Permissions",
-        "h_tr": "İzinler",
-        "en": "The app asks only for permissions needed for its features, such as access to files you choose to open.",
-        "tr": "Uygulama yalnızca özellikleri için gereken izinleri ister; örneğin seçtiğiniz dosyaları açmak için dosya erişimi."
-      },
-      {
-        "h_en": "Children",
-        "h_tr": "Çocuklar",
-        "en": "Our apps are not directed to children under 13, and we do not knowingly collect their personal information.",
-        "tr": "Uygulamalarımız 13 yaşın altındaki çocuklara yönelik değildir ve onların kişisel bilgilerini bilerek toplamayız."
-      },
-      {
-        "h_en": "Changes and contact",
-        "h_tr": "Değişiklikler ve iletişim",
-        "en": "We may update this policy and will change the date above. Questions: labsdevapps@gmail.com.",
-        "tr": "Bu politikayı güncelleyebiliriz ve yukarıdaki tarihi değiştiririz. Sorularınız için: labsdevapps@gmail.com."
-      }
-    ]
+    "text": "Information we collect\n{app} does not require an account, and we do not collect, sell or share your personal information on our own servers.\n\nData on your device\nContent you create, open or save in the app (such as files, settings and preferences) stays on your device.\n\nAds and third-party services\nSome of our apps may show ads through Google AdMob. Google may use device identifiers such as the advertising ID to serve and measure ads. See https://policies.google.com/privacy. You can reset or delete your advertising ID in your Android settings.\n\nInternet access\nIf the app loads online content, requests go directly from your device to the service that provides it. Those services have their own privacy policies.\n\nPermissions\nThe app asks only for permissions needed for its features, such as access to files you choose to open.\n\nChildren\nOur apps are not directed to children under 13, and we do not knowingly collect their personal information.\n\nChanges and contact\nWe may update this policy and will change the date above. Questions: labsdevapps@gmail.com."
   },
   "apps": [
     {

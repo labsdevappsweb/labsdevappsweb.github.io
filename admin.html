@@ -140,24 +140,21 @@ function fillEdit(body){
   const b=document.createElement("button");b.className="btn";b.textContent="Uygulamayı güncelle";b.onclick=()=>updateApp(a.id);body.appendChild(b);
   body.appendChild(policyEditor(a));
 }
-function toText(secs){return secs.map(x=>"## "+x.h_en+"\n"+x.en).join("\n\n")}
-function fromText(t){const out=[];let cur=null;t.split("\n").forEach(line=>{if(line.startsWith("## ")){cur={h_en:line.slice(3).trim(),en:""};out.push(cur)}else if(cur&&line.trim()){cur.en+=(cur.en?"\n":"")+line.trim()}});return out}
 function policyEditor(a){
-  const det=document.createElement("details");const sm=document.createElement("summary");sm.textContent="Gizlilik politikası"+(a.policy?" (özel)":" (şablon)");det.appendChild(sm);
-  const hint=document.createElement("p");hint.textContent="Her bölüm '## Başlık' satırıyla başlar, altına metni yazın. {app} yazarsanız uygulama adıyla değişir.";
-  const ta=document.createElement("textarea");ta.id="p-text";ta.style.minHeight="280px";
-  ta.value=toText(a.policy||DOC.policy_template.sections.map(x=>({h_en:x.h_en,en:x.en})));
+  const det=document.createElement("details");const sm=document.createElement("summary");sm.textContent="Gizlilik politikası"+(a.policy_text?" (özel)":" (şablon)");det.appendChild(sm);
+  const hint=document.createElement("p");hint.textContent="Metni istediğiniz gibi yazın veya yapıştırın. Boş satırla ayrılan bloklar paragraf olur; kısa, noktasız tek satırlık bloklar başlık olur. {app} uygulama adıyla değişir.";
+  const ta=document.createElement("textarea");ta.style.minHeight="320px";
+  ta.value=a.policy_text||DOC.policy_template.text;
   const dl=document.createElement("label");dl.textContent="Son güncelleme tarihi";
   const dateI=document.createElement("input");dateI.type="date";dateI.value=a.policy_date||today();
   const save=document.createElement("button");save.className="btn";save.textContent="Politikayı kaydet";
   save.onclick=()=>{
-    const secs=fromText(ta.value);
-    if(!secs.length){msg("En az bir '## Başlık' bölümü ekleyin",false);return}
-    const d=JSON.parse(JSON.stringify(DOC));const t=d.apps.find(x=>x.id===a.id);t.policy=secs;t.policy_date=dateI.value;
+    if(!ta.value.trim()){msg("Politika metni boş olamaz",false);return}
+    const d=JSON.parse(JSON.stringify(DOC));const t=d.apps.find(x=>x.id===a.id);t.policy_text=ta.value.trim();t.policy_date=dateI.value;
     commit("Gizlilik politikası: "+a.name,d);
   };
   const reset=document.createElement("button");reset.className="btn sec";reset.textContent="Şablona dön";
-  reset.onclick=()=>{const d=JSON.parse(JSON.stringify(DOC));const t=d.apps.find(x=>x.id===a.id);delete t.policy;delete t.policy_date;commit("Politika şablona döndü: "+a.name,d)};
+  reset.onclick=()=>{const d=JSON.parse(JSON.stringify(DOC));const t=d.apps.find(x=>x.id===a.id);delete t.policy_text;delete t.policy_date;commit("Politika şablona döndü: "+a.name,d)};
   det.append(hint,ta,dl,dateI,save,reset);
   return det;
 }
