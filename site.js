@@ -219,6 +219,38 @@
     sel.addEventListener("change", label);
   }
   langMenu();
+  /* Tema düğmesi: uygulamada (WebView) sistem temasını sayfa algılamadığı için sayfa içinde Açık/Koyu seçimi.
+     Seçim tarayıcıda saklanır; hiç seçilmediyse sistem teması kullanılır. */
+  function themeBtn() {
+    var root = document.documentElement;
+    var nav = document.querySelector("nav .w");
+    if (!nav) return;
+    var b = el("button", "tb");
+    b.type = "button";
+    function tr() { return root.getAttribute("data-l") === "tr"; }
+    function isDark() {
+      var t = root.getAttribute("data-theme");
+      if (t) return t === "dark";
+      return !!(window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
+    }
+    function paint() { b.textContent = isDark() ? (tr() ? "Açık" : "Light") : (tr() ? "Koyu" : "Dark"); }
+    b.onclick = function () {
+      var nt = isDark() ? "light" : "dark";
+      root.setAttribute("data-theme", nt);
+      try { localStorage.setItem("theme", nt); } catch (e) {}
+      paint();
+    };
+    var saved = null;
+    try { saved = localStorage.getItem("theme"); } catch (e) {}
+    if (saved === "dark" || saved === "light") root.setAttribute("data-theme", saved);
+    var lw = nav.querySelector(".lw");
+    if (lw) lw.parentNode.insertBefore(b, lw); else nav.appendChild(b);
+    paint();
+    setTimeout(paint, 800);
+    var sel = document.getElementById("lsel");
+    if (sel) sel.addEventListener("change", paint);
+  }
+  themeBtn();
   fetch("data/apps.json?v=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.json(); }).then(run).catch(function () {});
 
   /* Üst bardaki "Labs Dev Apps" logosuna kısa sürede 10 tıklama: yönetici paneli.
