@@ -45,7 +45,7 @@ function gtInit(){new google.translate.TranslateElement({pageLanguage:"en",autoD
 function pick(l,save){if(save){try{localStorage.setItem("lang",l)}catch(e){}}var o=l==="tr"||l==="en";setL(o?l:"en",l);if(o){if(document.querySelector("select.goog-te-combo"))gt("en")}else{gtN=0;gt(l)}}
 function auto(){var n=(navigator.language||"en").toLowerCase(),m={"zh-tw":"zh-TW","zh-hk":"zh-TW",he:"iw",nb:"no",nn:"no"},b=n.split("-")[0],c=m[n]||m[b]||(b==="zh"?"zh-CN":b);return ok.indexOf(c)>=0?c:"en"}
 document.querySelectorAll(".gpb").forEach(function(i){i.onerror=function(){if(i.dataset.f){var a=i.parentNode;a.className="b p";a.textContent="Google Play";return}i.dataset.f=1;i.src=U+"en_badge_web_generic.png"}});
-sel.onchange=function(){pick(this.value,1)};
+sel.onchange=function(){var v=this.value,saved=false;try{localStorage.setItem("lang",v);saved=localStorage.getItem("lang")===v}catch(e){}if(!saved){pick(v,1);return}var x="googtrans=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";document.cookie=x;document.cookie=x+";domain="+location.hostname;document.cookie=x+";domain=."+location.hostname;location.reload()};
 var sv=null;try{sv=localStorage.getItem("lang")}catch(e){}
 pick(sv&&ok.indexOf(sv)>=0?sv:auto(),0);
 </script></body></html>
