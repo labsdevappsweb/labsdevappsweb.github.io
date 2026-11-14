@@ -166,6 +166,59 @@
       });
     }
   }
+  /* Dil seçici: uygulamanın (WebView) yerel açılır listesi açılmadığı için, gizli <select> yerine
+     düğme + kendi listemizi gösteriyoruz. Asıl seçim yine <select> üzerinden yapılır. */
+  function langMenu() {
+    var sel = document.getElementById("lsel");
+    if (!sel || sel.dataset.cm) return;
+    sel.dataset.cm = "1";
+    var wrap = el("div", "lw");
+    sel.parentNode.insertBefore(wrap, sel);
+    sel.style.display = "none";
+    wrap.appendChild(sel);
+    var btn = el("button", "ls lb");
+    btn.type = "button";
+    btn.setAttribute("aria-haspopup", "listbox");
+    btn.setAttribute("aria-expanded", "false");
+    var menu = el("div", "lm");
+    menu.hidden = true;
+    menu.setAttribute("role", "listbox");
+    function label() {
+      var o = sel.options[sel.selectedIndex];
+      btn.textContent = o ? o.textContent : "Language";
+    }
+    function close() { menu.hidden = true; btn.setAttribute("aria-expanded", "false"); }
+    [].forEach.call(sel.options, function (o) {
+      var b = el("button", "lo", o.textContent);
+      b.type = "button";
+      b.setAttribute("role", "option");
+      b.dataset.v = o.value;
+      b.onclick = function () {
+        sel.value = o.value;
+        sel.dispatchEvent(new Event("change"));
+        label();
+        close();
+      };
+      menu.appendChild(b);
+    });
+    btn.onclick = function (e) {
+      e.stopPropagation();
+      var open = menu.hidden;
+      menu.hidden = !open;
+      btn.setAttribute("aria-expanded", String(open));
+      if (open) {
+        var cur = menu.querySelector('[data-v="' + sel.value + '"]');
+        if (cur) cur.scrollIntoView({ block: "center" });
+      }
+    };
+    document.addEventListener("click", function (e) { if (!wrap.contains(e.target)) close(); });
+    wrap.appendChild(btn);
+    wrap.appendChild(menu);
+    label();
+    setTimeout(label, 800);
+    sel.addEventListener("change", label);
+  }
+  langMenu();
   fetch("data/apps.json?v=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.json(); }).then(run).catch(function () {});
 
   /* Üst bardaki "Labs Dev Apps" logosuna kısa sürede 10 tıklama: yönetici paneli.
