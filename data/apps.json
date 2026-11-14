@@ -68,14 +68,6 @@
       "status": "live"
     },
     {
-      "id": "testapp",
-      "name": "Iready",
-      "icon": "icons/testapp.png",
-      "tagline_en": "Just For Test",
-      "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.bephazirlama",
-      "status": "live"
-    },
-    {
       "id": "iready",
       "name": "Iready",
       "icon": "icons/iready.png",
@@ -93,6 +85,7 @@
     }
   ],
   "deleted": [
-    "test1234"
+    "test1234",
+    "testapp"
   ]
 }
