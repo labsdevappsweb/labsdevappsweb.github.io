@@ -81,8 +81,16 @@ async function commit(message,content){
     return false;
   }
 }
+function toPngBase64(file){
+  return new Promise((res,rej)=>{
+    const url=URL.createObjectURL(file);const img=new Image();
+    img.onload=()=>{const c=document.createElement("canvas");c.width=img.naturalWidth;c.height=img.naturalHeight;c.getContext("2d").drawImage(img,0,0);URL.revokeObjectURL(url);res(c.toDataURL("image/png").split(",")[1])};
+    img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error("Bu dosya bir resim olarak okunamadı"))};
+    img.src=url;
+  });
+}
 async function uploadIcon(id,file){
-  const data=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result.split(",")[1]);fr.onerror=rej;fr.readAsDataURL(file)});
+  const data=await toPngBase64(file);
   let sha;try{sha=(await gh("icons/"+id+".png")).sha}catch(e){if(e.status!==404)throw e}
   const body={message:"İkon: "+id,content:data};if(sha)body.sha=sha;
   await gh("icons/"+id+".png",{method:"PUT",body:JSON.stringify(body)});
@@ -93,7 +101,7 @@ function field(label,value,id){
 }
 function fileField(label,id){
   const w=document.createElement("div");const l=document.createElement("label");l.textContent=label;
-  const i=document.createElement("input");i.type="file";i.accept="image/png";i.id=id;w.append(l,i);return w;
+  const i=document.createElement("input");i.type="file";i.accept="image/*";i.id=id;w.append(l,i);return w;
 }
 function statusSelect(val,id){
   const w=document.createElement("div");const l=document.createElement("label");l.textContent="Durum";
@@ -111,7 +119,7 @@ function addForm(){
   const c=document.createElement("div");c.className="card";
   c.innerHTML="<h3>Yeni uygulama ekle</h3>";
   const r1=document.createElement("div");r1.className="row";r1.append(field("Kimlik (id, küçük harf ve tire)","","n-id"),field("Ad","","n-name"));
-  const r2=document.createElement("div");r2.className="row";r2.append(fileField("İkon (PNG, isteğe bağlı)","n-icon"),statusSelect("live","n-status"));
+  const r2=document.createElement("div");r2.className="row";r2.append(fileField("İkon (resim dosyası, isteğe bağlı)","n-icon"),statusSelect("live","n-status"));
   const r3=document.createElement("div");r3.className="row";r3.append(field("Açıklama (EN)","","n-en"),field("Açıklama (TR)","","n-tr"));
   c.append(r1,r2,field("Play Store linki","","n-store"),r3);
   const b=document.createElement("button");b.className="btn";b.textContent="Uygulamayı ekle";b.onclick=addApp;c.appendChild(b);
@@ -133,7 +141,7 @@ function editForm(){
 function fillEdit(body){
   body.innerHTML="";
   const a=DOC.apps.find(x=>x.id===SEL);if(!a) return;
-  const r1=document.createElement("div");r1.className="row";r1.append(field("Ad",a.name,"e-name"),fileField("İkon değiştir (PNG, isteğe bağlı)","e-icon"));
+  const r1=document.createElement("div");r1.className="row";r1.append(field("Ad",a.name,"e-name"),fileField("İkon değiştir (resim dosyası, isteğe bağlı)","e-icon"));
   const r2=document.createElement("div");r2.className="row";r2.append(statusSelect(a.status,"e-status"),field("Play Store linki",a.store_url,"e-store"));
   const r3=document.createElement("div");r3.className="row";r3.append(field("Açıklama (EN)",a.tagline_en,"e-en"),field("Açıklama (TR)",a.tagline_tr,"e-tr"));
   body.append(r1,r2,r3);
