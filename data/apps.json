@@ -1,74 +1,58 @@
 {
+  "policy_template": {
+    "updated": "2026-11-14",
+    "sections": [
+      {
+        "h_en": "Information we collect",
+        "h_tr": "Topladığımız bilgiler",
+        "en": "{app} does not require an account, and we do not collect, sell or share your personal information on our own servers.",
+        "tr": "{app}, hesap gerektirmez; kişisel bilgilerinizi kendi sunucularımızda toplamaz, satmaz ve paylaşmayız."
+      },
+      {
+        "h_en": "Data on your device",
+        "h_tr": "Cihazınızdaki veriler",
+        "en": "Content you create, open or save in the app (such as files, settings and preferences) stays on your device.",
+        "tr": "Uygulamada oluşturduğunuz, açtığınız veya kaydettiğiniz içerikler (dosyalar, ayarlar ve tercihler gibi) cihazınızda kalır."
+      },
+      {
+        "h_en": "Ads and third-party services",
+        "h_tr": "Reklamlar ve üçüncü taraf hizmetleri",
+        "en": "Some of our apps may show ads through Google AdMob. Google may use device identifiers such as the advertising ID to serve and measure ads. See https://policies.google.com/privacy. You can reset or delete your advertising ID in your Android settings.",
+        "tr": "Bazı uygulamalarımız Google AdMob aracılığıyla reklam gösterebilir. Google, reklamları sunmak ve ölçmek için reklam kimliği gibi cihaz tanımlayıcılarını kullanabilir. Bkz. https://policies.google.com/privacy. Reklam kimliğinizi Android ayarlarından sıfırlayabilir veya silebilirsiniz."
+      },
+      {
+        "h_en": "Internet access",
+        "h_tr": "İnternet erişimi",
+        "en": "If the app loads online content, requests go directly from your device to the service that provides it. Those services have their own privacy policies.",
+        "tr": "Uygulama çevrimiçi içerik yüklüyorsa, istekler doğrudan cihazınızdan içeriği sağlayan hizmete gider. Bu hizmetlerin kendi gizlilik politikaları vardır."
+      },
+      {
+        "h_en": "Permissions",
+        "h_tr": "İzinler",
+        "en": "The app asks only for permissions needed for its features, such as access to files you choose to open.",
+        "tr": "Uygulama yalnızca özellikleri için gereken izinleri ister; örneğin seçtiğiniz dosyaları açmak için dosya erişimi."
+      },
+      {
+        "h_en": "Children",
+        "h_tr": "Çocuklar",
+        "en": "Our apps are not directed to children under 13, and we do not knowingly collect their personal information.",
+        "tr": "Uygulamalarımız 13 yaşın altındaki çocuklara yönelik değildir ve onların kişisel bilgilerini bilerek toplamayız."
+      },
+      {
+        "h_en": "Changes and contact",
+        "h_tr": "Değişiklikler ve iletişim",
+        "en": "We may update this policy and will change the date above. Questions: labsdevapps@gmail.com.",
+        "tr": "Bu politikayı güncelleyebiliriz ve yukarıdaki tarihi değiştiririz. Sorularınız için: labsdevapps@gmail.com."
+      }
+    ]
+  },
   "apps": [
-    {
-      "id": "bitcoin-explorer",
-      "name": "Bitcoin Explorer",
-      "icon": "icons/bitcoin-explorer.png",
-      "tagline_en": "Browse blockchain data in a simple, clean app.",
-      "tagline_tr": "Blockchain verilerine sade ve temiz bir uygulamayla göz atın.",
-      "store_url": "",
-      "status": "soon",
-      "policy_updated": "2026-11-14"
-    },
-    {
-      "id": "runpad",
-      "name": "RunPad: Mobile Code Editor",
-      "icon": "icons/runpad.png",
-      "tagline_en": "Write and run code right from your phone.",
-      "tagline_tr": "Telefonunuzdan kod yazın ve çalıştırın.",
-      "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.runpad",
-      "status": "live",
-      "policy_updated": "2026-11-14"
-    },
-    {
-      "id": "calculator",
-      "name": "Calculator: VAT, Loan, Units",
-      "icon": "icons/calculator.png",
-      "tagline_en": "VAT, loan and unit calculations in one place.",
-      "tagline_tr": "KDV, kredi ve birim hesaplamaları tek yerde.",
-      "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.calculator",
-      "status": "live",
-      "policy_updated": "2026-11-14"
-    },
-    {
-      "id": "bep-hazirlama",
-      "name": "BEP Ders Planı Hazırlama",
-      "icon": "icons/bep-hazirlama.png",
-      "tagline_en": "Prepare lesson plans and files quickly.",
-      "tagline_tr": "Ders planlarını ve dosyaları hızlıca hazırlayın.",
-      "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.bephazirlama",
-      "status": "live",
-      "policy_updated": "2026-11-14"
-    },
-    {
-      "id": "pdf-reader",
-      "name": "PDF Reader, Editor & Scanner",
-      "icon": "icons/pdf-reader.png",
-      "tagline_en": "Read, annotate, sign, merge, scan and compress PDFs. OCR and text to speech.",
-      "tagline_tr": "PDF’leri okuyun, not alın, imzalayın, birleştirin, tarayın ve sıkıştırın. OCR ve metin okuma özelliği.",
-      "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.pdfreader",
-      "status": "live",
-      "policy_updated": "2026-11-14"
-    },
-    {
-      "id": "colap-mobile",
-      "name": "Colap Mobile",
-      "icon": "icons/colap-mobile.png",
-      "tagline_en": "A mobile companion app from Labs Dev Apps.",
-      "tagline_tr": "Labs Dev Apps’ten bir mobil yardımcı uygulama.",
-      "store_url": "",
-      "status": "soon",
-      "policy_updated": "2026-11-14"
-    },
-    {
-      "id": "webtoapp",
-      "name": "WebToApp: HTML to App Maker",
-      "icon": "icons/webtoapp.png",
-      "tagline_en": "Turn your HTML pages into apps.",
-      "tagline_tr": "HTML sayfalarınızı uygulamaya dönüştürün.",
-      "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.webtoapp",
-      "status": "live",
-      "policy_updated": "2026-11-14"
-    }
+    { "id": "bitcoin-explorer", "name": "Bitcoin Explorer", "icon": "icons/bitcoin-explorer.png", "tagline_en": "Browse blockchain data in a simple, clean app.", "tagline_tr": "Blockchain verilerine sade ve temiz bir uygulamayla göz atın.", "store_url": "", "status": "soon" },
+    { "id": "runpad", "name": "RunPad: Mobile Code Editor", "icon": "icons/runpad.png", "tagline_en": "Write and run code right from your phone.", "tagline_tr": "Telefonunuzdan kod yazın ve çalıştırın.", "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.runpad", "status": "live" },
+    { "id": "calculator", "name": "Calculator: VAT, Loan, Units", "icon": "icons/calculator.png", "tagline_en": "VAT, loan and unit calculations in one place.", "tagline_tr": "KDV, kredi ve birim hesaplamaları tek yerde.", "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.calculator", "status": "live" },
+    { "id": "bep-hazirlama", "name": "BEP Ders Planı Hazırlama", "icon": "icons/bep-hazirlama.png", "tagline_en": "Prepare lesson plans and files quickly.", "tagline_tr": "Ders planlarını ve dosyaları hızlıca hazırlayın.", "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.bephazirlama", "status": "live" },
+    { "id": "pdf-reader", "name": "PDF Reader, Editor & Scanner", "icon": "icons/pdf-reader.png", "tagline_en": "Read, annotate, sign, merge, scan and compress PDFs. OCR and text to speech.", "tagline_tr": "PDF’leri okuyun, not alın, imzalayın, birleştirin, tarayın ve sıkıştırın. OCR ve metin okuma özelliği.", "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.pdfreader", "status": "live" },
+    { "id": "colap-mobile", "name": "Colap Mobile", "icon": "icons/colap-mobile.png", "tagline_en": "A mobile companion app from Labs Dev Apps.", "tagline_tr": "Labs Dev Apps’ten bir mobil yardımcı uygulama.", "store_url": "", "status": "soon" },
+    { "id": "webtoapp", "name": "WebToApp: HTML to App Maker", "icon": "icons/webtoapp.png", "tagline_en": "Turn your HTML pages into apps.", "tagline_tr": "HTML sayfalarınızı uygulamaya dönüştürün.", "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.webtoapp", "status": "live" }
   ]
 }

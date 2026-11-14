@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Yönetici paneli · Labs Dev Apps</title>
+<style>
+body{font:15px/1.5 system-ui,-apple-system,sans-serif;margin:0;background:#f7f6fd;color:#18152e}
+header{background:#150f43;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+main{max-width:860px;margin:0 auto;padding:20px}
+.card{background:#fff;border:1px solid #e6e3f5;border-radius:14px;padding:16px;margin-bottom:14px}
+label{display:block;font-weight:600;margin:10px 0 4px}
+input,select,textarea{width:100%;box-sizing:border-box;padding:9px;border:1px solid #cfc9ea;border-radius:8px;font:inherit;background:#fff;color:inherit}
+textarea{min-height:70px}
+button{background:#6a4df0;color:#fff;border:0;border-radius:999px;padding:9px 18px;font:inherit;font-weight:700;cursor:pointer;margin:10px 8px 0 0}
+button.sec{background:#e6e3f5;color:#18152e}
+.msg{margin:10px 0;font-weight:600}.ok{color:#137333}.err{color:#b3261e}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.row{grid-template-columns:1fr}}
+details{border:1px dashed #cfc9ea;border-radius:10px;padding:8px 12px;margin-top:10px}
+summary{cursor:pointer;font-weight:700}
+.sec-box{border-top:1px solid #eee;margin-top:12px;padding-top:8px}
+</style></head>
+<body>
+<header><strong>Yönetici paneli</strong><button class="sec" id="out" hidden>Çıkış</button></header>
+<main>
+  <div id="login" class="card">
+    <p>GitHub erişim token'ınızı girin. Token yalnızca bu sekmede (sessionStorage) tutulur ve sekme kapanınca silinir. Token'ın bu depoya yazma (Contents: Read and write) izni olmalıdır.</p>
+    <label for="tok">Token</label>
+    <input id="tok" type="password" autocomplete="off">
+    <button id="go">Gir</button>
+    <div id="lmsg" class="msg"></div>
+  </div>
+
+  <div id="app" hidden>
+    <div class="card">
+      <h3>Yeni uygulama ekle</h3>
+      <div class="row">
+        <div><label>Kimlik (id, küçük harf ve tire)</label><input id="n-id" placeholder="ornek-uygulama"></div>
+        <div><label>Ad</label><input id="n-name" placeholder="Uygulama adı"></div>
+      </div>
+      <div class="row">
+        <div><label>İkon (PNG, isteğe bağlı)</label><input id="n-icon" type="file" accept="image/png"></div>
+        <div><label>Durum</label><select id="n-status"><option value="live">Yayında</option><option value="soon">Yakında</option></select></div>
+      </div>
+      <label>Play Store linki</label><input id="n-store" placeholder="https://play.google.com/store/apps/details?id=...">
+      <div class="row">
+        <div><label>Açıklama (EN)</label><input id="n-en"></div>
+        <div><label>Açıklama (TR)</label><input id="n-tr"></div>
+      </div>
+      <button id="add">Uygulamayı ekle</button>
+    </div>
+    <div id="list"></div>
+    <div id="status" class="msg"></div>
+  </div>
+</main>
+
+<script>
+const OWNER="labsdevappsweb", REPO="labsdevappsweb.github.io";
+const API="https://api.github.com/repos/"+OWNER+"/"+REPO+"/contents/";
+let TOKEN=sessionStorage.getItem("gh_token")||"", DOC=null, SHA=null;
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+const hdr=()=>({Authorization:"Bearer "+TOKEN,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"});
+function msg(t,ok){const s=$("status");s.textContent=t;s.className="msg "+(ok?"ok":"err")}
+async function gh(path,opt){const r=await fetch(API+path,Object.assign({headers:hdr()},opt||{}));if(!r.ok){const e=new Error(r.status+" "+(await r.text()).slice(0,160));e.status=r.status;throw e}return r.json()}
+function dec(s){const b=atob(s.replace(/\n/g,""));return new TextDecoder().decode(Uint8Array.from(b,c=>c.charCodeAt(0)))}
+function enc(s){const bytes=new TextEncoder().encode(s);let b="";bytes.forEach(x=>b+=String.fromCharCode(x));return btoa(b)}
+
+async function login(){
+  TOKEN=$("tok").value.trim();
+  try{
+    const r=await fetch("https://api.github.com/repos/"+OWNER+"/"+REPO,{headers:hdr()});
+    if(!r.ok) throw new Error("Token geçersiz ("+r.status+")");
+    const j=await r.json();
+    if(!j.permissions||!j.permissions.push) throw new Error("Bu token'ın yazma izni yok");
+    sessionStorage.setItem("gh_token",TOKEN);
+    show();
+  }catch(e){$("lmsg").textContent=e.message;$("lmsg").className="msg err"}
+}
+function show(){$("login").hidden=true;$("app").hidden=false;$("out").hidden=false;load()}
+async function load(){
+  try{
+    const j=await gh("data/apps.json");
+    DOC=JSON.parse(dec(j.content));SHA=j.sha;render();
+  }catch(e){msg("Veri okunamadı: "+e.message,false)}
+}
+async function commit(message,content){
+  const body={message,content:enc(JSON.stringify(content,null,2)+"\n"),sha:SHA};
+  try{
+    const r=await gh("data/apps.json",{method:"PUT",body:JSON.stringify(body)});
+    SHA=r.content.sha;DOC=content;msg("Kaydedildi ✓ (birkaç dakika içinde yayında olur)",true);
+  }catch(e){
+    if(e.status===409){msg("Başka bir kayıt var, veri yeniden yükleniyor. Tekrar deneyin.",false);await load()}
+    else msg("Kaydedilemedi: "+e.message,false);
+  }
+}
+async function uploadIcon(id,file){
+  const data=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result.split(",")[1]);fr.onerror=rej;fr.readAsDataURL(file)});
+  let sha;try{sha=(await gh("icons/"+id+".png")).sha}catch(e){if(e.status!==404)throw e}
+  const body={message:"İkon: "+id,content:data};if(sha)body.sha=sha;
+  await gh("icons/"+id+".png",{method:"PUT",body:JSON.stringify(body)});
+}
+function field(label,value,onin){
+  const w=document.createElement("div");const l=document.createElement("label");l.textContent=label;
+  const i=document.createElement("input");i.value=value||"";i.oninput=()=>onin(i.value);w.append(l,i);return w;
+}
+function render(){
+  const list=$("list");list.innerHTML="";
+  DOC.apps.forEach((a,idx)=>{
+    const c=document.createElement("div");c.className="card";
+    const h=document.createElement("h3");h.textContent=a.name;c.appendChild(h);
+    const row=document.createElement("div");row.className="row";
+    const draft={...a};
+    row.append(field("Ad",a.name,v=>draft.name=v),field("Play Store linki",a.store_url,v=>draft.store_url=v));
+    const row2=document.createElement("div");row2.className="row";
+    row2.append(field("Açıklama (EN)",a.tagline_en,v=>draft.tagline_en=v),field("Açıklama (TR)",a.tagline_tr,v=>draft.tagline_tr=v));
+    const st=document.createElement("select");st.innerHTML='<option value="live">Yayında</option><option value="soon">Yakında</option>';st.value=a.status;st.onchange=()=>draft.status=st.value;
+    const sl=document.createElement("label");sl.textContent="Durum";
+    c.append(row,row2,sl,st);
+    const save=document.createElement("button");save.textContent="Uygulamayı kaydet";save.onclick=()=>{const d=JSON.parse(JSON.stringify(DOC));Object.assign(d.apps[idx],draft);commit("Uygulama güncelle: "+draft.name,d)};
+    c.appendChild(save);
+    c.appendChild(policyEditor(a,idx));
+    list.appendChild(c);
+  });
+}
+function policyEditor(a,idx){
+  const det=document.createElement("details");const sm=document.createElement("summary");sm.textContent="Gizlilik politikası"+(a.policy?" (özel)":" (şablon)");det.appendChild(sm);
+  const sections=JSON.parse(JSON.stringify(a.policy||DOC.policy_template.sections)).map(s=>({...s}));
+  const dateI=document.createElement("input");dateI.type="date";dateI.value=a.policy_date||today();
+  const dl=document.createElement("label");dl.textContent="Son güncelleme tarihi";det.append(dl,dateI);
+  sections.forEach((s,k)=>{
+    const box=document.createElement("div");box.className="sec-box";
+    const t=document.createElement("strong");t.textContent="Bölüm "+(k+1);box.appendChild(t);
+    box.append(field("Başlık (EN)",s.h_en,v=>s.h_en=v),field("Başlık (TR)",s.h_tr,v=>s.h_tr=v));
+    const ta=(lbl,val,cb)=>{const w=document.createElement("div");const l=document.createElement("label");l.textContent=lbl;const t=document.createElement("textarea");t.value=val;t.oninput=()=>cb(t.value);w.append(l,t);return w};
+    box.append(ta("İçerik (EN)",s.en,v=>s.en=v),ta("İçerik (TR)",s.tr,v=>s.tr=v));
+    det.appendChild(box);
+  });
+  const save=document.createElement("button");save.textContent="Politikayı kaydet";
+  save.onclick=()=>{const d=JSON.parse(JSON.stringify(DOC));d.apps[idx].policy=sections;d.apps[idx].policy_date=dateI.value;commit("Gizlilik politikası: "+a.name,d)};
+  const reset=document.createElement("button");reset.className="sec";reset.textContent="Şablona dön";
+  reset.onclick=()=>{const d=JSON.parse(JSON.stringify(DOC));delete d.apps[idx].policy;delete d.apps[idx].policy_date;commit("Politika şablona döndü: "+a.name,d)};
+  det.append(save,reset);
+  return det;
+}
+$("go").onclick=login;
+$("tok").onkeydown=e=>{if(e.key==="Enter")login()};
+$("out").onclick=()=>{sessionStorage.removeItem("gh_token");location.reload()};
+$("add").onclick=async()=>{
+  const id=$("n-id").value.trim(),name=$("n-name").value.trim(),file=$("n-icon").files[0];
+  if(!/^[a-z0-9-]+$/.test(id)){msg("Kimlik yalnızca küçük harf, rakam ve tire içermeli",false);return}
+  if(!name){msg("Ad gerekli",false);return}
+  if(DOC.apps.some(a=>a.id===id)){msg("Bu kimlik zaten var",false);return}
+  try{
+    if(file) await uploadIcon(id,file);
+    const d=JSON.parse(JSON.stringify(DOC));
+    d.apps.push({id,name,icon:"icons/"+id+".png",tagline_en:$("n-en").value,tagline_tr:$("n-tr").value,store_url:$("n-store").value,status:$("n-status").value});
+    await commit("Uygulama ekle: "+name,d);
+  }catch(e){msg("Eklenemedi: "+e.message,false)}
+};
+if(TOKEN){$("tok").value="";show()}
+</script>
+</body></html>
