@@ -39,9 +39,10 @@
     var m = el("a", null, "labsdevapps@gmail.com"); m.href = "mailto:labsdevapps@gmail.com"; head.appendChild(m);
     pb.appendChild(head);
     (a.policy || tpl.sections).forEach(function (s) {
-      var h = el("h4"); bil(s.h_en, s.h_tr).forEach(function (x) { h.appendChild(x); }); pb.appendChild(h);
-      var p = el("p"); bil(s.en.split("{app}").join(a.name), s.tr.split("{app}").join(a.name)).forEach(function (x) { p.appendChild(x); });
-      pb.appendChild(p);
+      pb.appendChild(el("h4", null, s.h_en));
+      s.en.split("\n").filter(function (x) { return x.trim(); }).forEach(function (line) {
+        pb.appendChild(el("p", null, line.split("{app}").join(a.name)));
+      });
     });
   }
   function article(a, tpl) {

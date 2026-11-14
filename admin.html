@@ -140,31 +140,25 @@ function fillEdit(body){
   const b=document.createElement("button");b.className="btn";b.textContent="Uygulamayı güncelle";b.onclick=()=>updateApp(a.id);body.appendChild(b);
   body.appendChild(policyEditor(a));
 }
+function toText(secs){return secs.map(x=>"## "+x.h_en+"\n"+x.en).join("\n\n")}
+function fromText(t){const out=[];let cur=null;t.split("\n").forEach(line=>{if(line.startsWith("## ")){cur={h_en:line.slice(3).trim(),en:""};out.push(cur)}else if(cur&&line.trim()){cur.en+=(cur.en?"\n":"")+line.trim()}});return out}
 function policyEditor(a){
   const det=document.createElement("details");const sm=document.createElement("summary");sm.textContent="Gizlilik politikası"+(a.policy?" (özel)":" (şablon)");det.appendChild(sm);
-  const sections=JSON.parse(JSON.stringify(a.policy||DOC.policy_template.sections));
+  const hint=document.createElement("p");hint.textContent="Her bölüm '## Başlık' satırıyla başlar, altına metni yazın. {app} yazarsanız uygulama adıyla değişir.";
+  const ta=document.createElement("textarea");ta.id="p-text";ta.style.minHeight="280px";
+  ta.value=toText(a.policy||DOC.policy_template.sections.map(x=>({h_en:x.h_en,en:x.en})));
   const dl=document.createElement("label");dl.textContent="Son güncelleme tarihi";
   const dateI=document.createElement("input");dateI.type="date";dateI.value=a.policy_date||today();
-  det.append(dl,dateI);
-  sections.forEach((s,k)=>{
-    const box=document.createElement("div");box.className="sec-box";
-    const t=document.createElement("strong");t.textContent="Bölüm "+(k+1);box.appendChild(t);
-    box.append(field("Başlık (EN)",s.h_en,null),field("Başlık (TR)",s.h_tr,null));
-    const ta=(lbl,val,cb)=>{const w=document.createElement("div");const l=document.createElement("label");l.textContent=lbl;const t=document.createElement("textarea");t.value=val;t.oninput=()=>cb(t.value);w.append(l,t);return w};
-    box.append(ta("İçerik (EN)",s.en,v=>s.en=v),ta("İçerik (TR)",s.tr,v=>s.tr=v));
-    box.querySelectorAll("input").forEach((inp,i)=>inp.oninput=()=>{if(i===0)s.h_en=inp.value;else s.h_tr=inp.value});
-    det.appendChild(box);
-    s._box=box;
-  });
   const save=document.createElement("button");save.className="btn";save.textContent="Politikayı kaydet";
   save.onclick=()=>{
-    const secs=sections.map(s=>({h_en:s.h_en,h_tr:s.h_tr,en:s.en,tr:s.tr}));
+    const secs=fromText(ta.value);
+    if(!secs.length){msg("En az bir '## Başlık' bölümü ekleyin",false);return}
     const d=JSON.parse(JSON.stringify(DOC));const t=d.apps.find(x=>x.id===a.id);t.policy=secs;t.policy_date=dateI.value;
     commit("Gizlilik politikası: "+a.name,d);
   };
   const reset=document.createElement("button");reset.className="btn sec";reset.textContent="Şablona dön";
   reset.onclick=()=>{const d=JSON.parse(JSON.stringify(DOC));const t=d.apps.find(x=>x.id===a.id);delete t.policy;delete t.policy_date;commit("Politika şablona döndü: "+a.name,d)};
-  det.append(save,reset);
+  det.append(hint,ta,dl,dateI,save,reset);
   return det;
 }
 async function updateApp(id){
