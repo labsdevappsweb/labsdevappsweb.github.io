@@ -66,19 +66,10 @@
       "tagline_tr": "HTML sayfalarınızı uygulamaya dönüştürün.",
       "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.webtoapp",
       "status": "live"
-    },
-    {
-      "id": "iready",
-      "name": "IReady",
-      "icon": "icons/iready.png",
-      "tagline_en": "Always ready for what's next.",
-      "store_url": "Always ready for what's next.",
-      "status": "live",
-      "policy_text": "Privacy Policy for lReady\nEffective Date: November 14, 2026\nThis Privacy Policy describes how the lReady (\"we\", \"our\", or \"app\") mobile application collects, uses, and protects your information. By downloading and using lReady, you agree to the terms of this policy.\n1. Information We Collect\nTo improve your experience and provide core functionalities, our app may collect the following types of data:\n * Non-Personal Information: Anonymous data such as device type, operating system version, in-app usage statistics, and crash reports.\n * Permitted Data: Data within the scope of basic permissions requested on your device for lReady to function properly.\n2. How We Use Your Information\nThe information we collect is used for the following purposes:\n * To operate and maintain the lReady app and improve its performance.\n * To detect, prevent, and fix bugs and technical issues.\n * To personalize and enhance your user experience.\n3. Sharing of Information\nYour personal data is never sold, traded, or rented to third parties. Your information remains strictly confidential, except as required by law or legal processes.\n4. Data Security\nWe implement administrative, technical, and physical security measures designed to protect your information. However, please remember that no method of transmission over the internet is 100% secure.\n5. Children's Privacy\nlReady does not knowingly collect personal data from children under the age of 13. If you believe that a child has provided us with personal information, please contact us, and we will promptly delete such data.\n6. Changes to This Privacy Policy\nWe may update our Privacy Policy from time to time. Any changes will take effect immediately upon posting the updated policy on this page. You are advised to review this policy periodically for any changes.\n7. Contact Us\nIf you have any questions or suggestions about our Privacy Policy, please contact us at:\n * Email: labsdevapps@gmail.com",
-      "policy_date": "2026-11-14"
     }
   ],
   "deleted": [
-    "test1234"
+    "test1234",
+    "iready"
   ]
 }
