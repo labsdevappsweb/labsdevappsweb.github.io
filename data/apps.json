@@ -66,6 +66,14 @@
       "tagline_tr": "HTML sayfalarınızı uygulamaya dönüştürün.",
       "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.webtoapp",
       "status": "live"
+    },
+    {
+      "id": "labsdevhub",
+      "name": "Labs Dev Hub",
+      "icon": "icons/labsdevhub.png",
+      "tagline_en": "Initial release of Labs Dev Hub: browse all Labs Dev Apps in one place, read their privacy policies, and open them on Google Play. ",
+      "store_url": "",
+      "status": "soon"
     }
   ],
   "deleted": [
