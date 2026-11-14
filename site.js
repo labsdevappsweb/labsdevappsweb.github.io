@@ -120,6 +120,8 @@
     /* Uygulama sayısı */
     var cnt = document.querySelector(".st b");
     if (cnt) cnt.textContent = data.apps.length;
+    var gone = data.deleted || [];
+    data.apps = data.apps.filter(function (a) { return gone.indexOf(a.id) < 0; });
     data.apps.forEach(function (a) {
       if (grid && !grid.querySelector('img[src^="' + a.icon + '"]')) { grid.appendChild(card(a)); added = true; }
       var pv = document.getElementById("pv-" + a.id);
