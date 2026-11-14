@@ -29,6 +29,7 @@ summary{cursor:pointer;font-weight:700}
   </div>
 
   <div id="app" hidden>
+    <div id="status" class="msg" style="position:sticky;top:0;z-index:5;background:#f7f6fd;padding:8px 0"></div>
     <div class="card">
       <h3>Yeni uygulama ekle</h3>
       <div class="row">
@@ -47,7 +48,6 @@ summary{cursor:pointer;font-weight:700}
       <button id="add">Uygulamayı ekle</button>
     </div>
     <div id="list"></div>
-    <div id="status" class="msg"></div>
   </div>
 </main>
 
@@ -144,7 +144,10 @@ $("go").onclick=login;
 $("tok").onkeydown=e=>{if(e.key==="Enter")login()};
 $("out").onclick=()=>{sessionStorage.removeItem("gh_token");location.reload()};
 $("add").onclick=async()=>{
-  const id=$("n-id").value.trim(),name=$("n-name").value.trim(),file=$("n-icon").files[0];
+  const name=$("n-name").value.trim(),file=$("n-icon").files[0];
+  let id=$("n-id").value.trim();
+  if(!id) id=name.toLowerCase().replace(/ı/g,"i").replace(/ğ/g,"g").replace(/ü/g,"u").replace(/ş/g,"s").replace(/ö/g,"o").replace(/ç/g,"c").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+  $("n-id").value=id;
   if(!/^[a-z0-9-]+$/.test(id)){msg("Kimlik yalnızca küçük harf, rakam ve tire içermeli",false);return}
   if(!name){msg("Ad gerekli",false);return}
   if(DOC.apps.some(a=>a.id===id)){msg("Bu kimlik zaten var",false);return}
@@ -153,6 +156,7 @@ $("add").onclick=async()=>{
     const d=JSON.parse(JSON.stringify(DOC));
     d.apps.push({id,name,icon:"icons/"+id+".png",tagline_en:$("n-en").value,tagline_tr:$("n-tr").value,store_url:$("n-store").value,status:$("n-status").value});
     await commit("Uygulama ekle: "+name,d);
+    if(DOC.apps.some(a=>a.id===id)){["n-id","n-name","n-store","n-en","n-tr"].forEach(x=>$(x).value="");$("n-icon").value=""}
   }catch(e){msg("Eklenemedi: "+e.message,false)}
 };
 if(TOKEN){$("tok").value="";show()}
