@@ -1,0 +1,74 @@
+{
+  "apps": [
+    {
+      "id": "bitcoin-explorer",
+      "name": "Bitcoin Explorer",
+      "icon": "icons/bitcoin-explorer.png",
+      "tagline_en": "Browse blockchain data in a simple, clean app.",
+      "tagline_tr": "Blockchain verilerine sade ve temiz bir uygulamayla göz atın.",
+      "store_url": "",
+      "status": "soon",
+      "policy_updated": "2026-11-14"
+    },
+    {
+      "id": "runpad",
+      "name": "RunPad: Mobile Code Editor",
+      "icon": "icons/runpad.png",
+      "tagline_en": "Write and run code right from your phone.",
+      "tagline_tr": "Telefonunuzdan kod yazın ve çalıştırın.",
+      "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.runpad",
+      "status": "live",
+      "policy_updated": "2026-11-14"
+    },
+    {
+      "id": "calculator",
+      "name": "Calculator: VAT, Loan, Units",
+      "icon": "icons/calculator.png",
+      "tagline_en": "VAT, loan and unit calculations in one place.",
+      "tagline_tr": "KDV, kredi ve birim hesaplamaları tek yerde.",
+      "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.calculator",
+      "status": "live",
+      "policy_updated": "2026-11-14"
+    },
+    {
+      "id": "bep-hazirlama",
+      "name": "BEP Ders Planı Hazırlama",
+      "icon": "icons/bep-hazirlama.png",
+      "tagline_en": "Prepare lesson plans and files quickly.",
+      "tagline_tr": "Ders planlarını ve dosyaları hızlıca hazırlayın.",
+      "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.bephazirlama",
+      "status": "live",
+      "policy_updated": "2026-11-14"
+    },
+    {
+      "id": "pdf-reader",
+      "name": "PDF Reader, Editor & Scanner",
+      "icon": "icons/pdf-reader.png",
+      "tagline_en": "Read, annotate, sign, merge, scan and compress PDFs. OCR and text to speech.",
+      "tagline_tr": "PDF’leri okuyun, not alın, imzalayın, birleştirin, tarayın ve sıkıştırın. OCR ve metin okuma özelliği.",
+      "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.pdfreader",
+      "status": "live",
+      "policy_updated": "2026-11-14"
+    },
+    {
+      "id": "colap-mobile",
+      "name": "Colap Mobile",
+      "icon": "icons/colap-mobile.png",
+      "tagline_en": "A mobile companion app from Labs Dev Apps.",
+      "tagline_tr": "Labs Dev Apps’ten bir mobil yardımcı uygulama.",
+      "store_url": "",
+      "status": "soon",
+      "policy_updated": "2026-11-14"
+    },
+    {
+      "id": "webtoapp",
+      "name": "WebToApp: HTML to App Maker",
+      "icon": "icons/webtoapp.png",
+      "tagline_en": "Turn your HTML pages into apps.",
+      "tagline_tr": "HTML sayfalarınızı uygulamaya dönüştürün.",
+      "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.webtoapp",
+      "status": "live",
+      "policy_updated": "2026-11-14"
+    }
+  ]
+}
