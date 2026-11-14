@@ -66,6 +66,14 @@
       "tagline_tr": "HTML sayfalarınızı uygulamaya dönüştürün.",
       "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.webtoapp",
       "status": "live"
+    },
+    {
+      "id": "iready",
+      "name": "IReady",
+      "icon": "icons/iready.png",
+      "tagline_en": "Always ready for what's next.",
+      "store_url": "Always ready for what's next.",
+      "status": "live"
     }
   ],
   "deleted": [
