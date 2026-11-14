@@ -26,7 +26,33 @@
       var s = el("span", "soon"); bil("Coming soon", "Yakında").forEach(function (x) { s.appendChild(x); }); ac.appendChild(s);
     }
     c.appendChild(ac);
+    attachCopy(c, a);
     return c;
+  }
+  /* Panelden eklenen kartlar: ikona 10 tıklama -> gizlilik ve Play linki kopyalama düğmeleri */
+  function attachCopy(card, a) {
+    var im = card.querySelector(".t img"), n = 0, last = 0;
+    if (!im) return;
+    im.addEventListener("click", function () {
+      var now = Date.now();
+      n = now - last > 2500 ? 1 : n + 1;
+      last = now;
+      if (n < 10) return;
+      n = 0;
+      var old = card.querySelector(".hx");
+      if (old) { old.remove(); return; }
+      var tr = document.documentElement.getAttribute("data-l") === "tr";
+      var base = location.origin + location.pathname.replace(/index\.html$/, "");
+      var L = [[tr ? "Gizlilik politikası linkini kopyala" : "Copy privacy policy link", base + "?privacy=" + a.id]];
+      if (a.status === "live" && a.store_url) L.push([tr ? "Google Play linkini kopyala" : "Copy Google Play link", a.store_url]);
+      var p = el("div", "hx"); p.setAttribute("translate", "no");
+      L.forEach(function (x) {
+        var b = el("button", "cpb", x[0]); b.type = "button"; b.dataset.t = x[0];
+        b.onclick = function () { cpy(x[1], b); };
+        p.appendChild(b);
+      });
+      card.appendChild(p);
+    });
   }
   function fillPolicy(pb, a, tpl) {
     while (pb.firstChild) pb.removeChild(pb.firstChild);
