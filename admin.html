@@ -106,8 +106,15 @@ function fileField(label,id){
 }
 function statusSelect(val,id){
   const w=document.createElement("div");const l=document.createElement("label");l.textContent="Durum";
-  const s=document.createElement("select");s.id=id;s.innerHTML='<option value="live">Yayında</option><option value="soon">Yakında</option>';s.value=val||"live";
-  w.append(l,s);return w;
+  const h=document.createElement("input");h.type="hidden";h.id=id;h.value=val||"live";
+  const row=document.createElement("div");row.style.cssText="display:flex;gap:8px;margin-bottom:12px";
+  const btns=[["live","Yayında"],["soon","Yakında"]].map(([v,t])=>{
+    const b=document.createElement("button");b.type="button";b.className="btn";b.textContent=t;b.dataset.v=v;
+    b.onclick=()=>{h.value=v;paint()};row.appendChild(b);return b;
+  });
+  function paint(){btns.forEach(b=>{const on=b.dataset.v===h.value;b.style.background=on?"#6a4df0":"#fff";b.style.color=on?"#fff":"#18152e";b.style.borderColor=on?"#6a4df0":"#cfc9e8"})}
+  paint();
+  w.append(l,h,row);return w;
 }
 function setMode(m){
   MODE=m;
@@ -168,16 +175,25 @@ function addForm(){
   const b=document.createElement("button");b.className="btn";b.textContent="Uygulamayı ekle";b.onclick=addApp;c.appendChild(b);
   return c;
 }
+function appPicker(onPick,selectedId){
+  const list=document.createElement("div");
+  const btns=DOC.apps.map(a=>{
+    const b=document.createElement("button");b.type="button";b.className="btn";b.textContent=a.name;b.dataset.id=a.id;
+    b.style.cssText="display:block;width:100%;text-align:left;margin:0 0 8px;background:#fff;color:#18152e;border:1px solid #cfc9e8";
+    b.onclick=()=>{mark(a.id);onPick(a.id)};list.appendChild(b);return b;
+  });
+  function mark(id){btns.forEach(x=>{const on=x.dataset.id===id;x.style.background=on?"#eee9ff":"#fff";x.style.borderColor=on?"#6a4df0":"#cfc9e8"})}
+  mark(selectedId);
+  return list;
+}
 function editForm(){
   const c=document.createElement("div");c.className="card";
   c.innerHTML="<h3>Uygulamayı güncelle</h3>";
   const l=document.createElement("label");l.textContent="Uygulama seçin";
-  const sel=document.createElement("select");sel.id="e-sel";
-  sel.innerHTML='<option value="">— seçin —</option>'+DOC.apps.map(a=>'<option value="'+a.id+'">'+a.name.replace(/</g,"&lt;")+'</option>').join("");
-  sel.value=SEL||"";
-  c.append(l,sel);
-  const body=document.createElement("div");c.appendChild(body);
-  sel.onchange=()=>{SEL=sel.value;fillEdit(body)};
+  const body=document.createElement("div");
+  const list=appPicker(id=>{SEL=id;fillEdit(body)},SEL);
+  c.append(l,list);
+  c.appendChild(body);
   if(SEL) fillEdit(body);
   return c;
 }
