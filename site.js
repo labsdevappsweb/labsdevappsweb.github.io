@@ -69,16 +69,16 @@
   }
   fetch("data/apps.json?v=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.json(); }).then(run).catch(function () {});
 
-  /* 10 tıklama menüsüne yönetici paneli bağlantısı */
-  new MutationObserver(function (ms) {
-    ms.forEach(function (m) {
-      m.addedNodes.forEach(function (n) {
-        if (n.nodeType === 1 && n.classList && n.classList.contains("hx") && !n.querySelector(".adm")) {
-          var b = el("button", "cpb adm", "Yönetici paneli / Admin"); b.type = "button";
-          b.onclick = function () { location.href = "admin.html"; };
-          n.appendChild(b);
-        }
-      });
+  /* Üst bardaki "Labs Dev Apps" logosuna kısa sürede 10 tıklama: yönetici paneli.
+     (Uygulama ikonlarındaki 10 tıklama kopyalama menüsünü açmaya devam eder.) */
+  var brand = document.querySelector("nav a.br");
+  if (brand) {
+    var n = 0, last = 0;
+    brand.addEventListener("click", function () {
+      var now = Date.now();
+      n = now - last > 2500 ? 1 : n + 1;
+      last = now;
+      if (n >= 10) { n = 0; location.href = "admin.html"; }
     });
-  }).observe(document.body, { childList: true, subtree: true });
+  }
 })();
