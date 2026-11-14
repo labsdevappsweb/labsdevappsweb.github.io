@@ -121,12 +121,17 @@
     if (added) askTr();
   }
   var added = false;
+  /* Panelden eklenen içerik İngilizce. Seçili dil (cihaz dili ya da kullanıcının seçimi) İngilizce değilse
+     sayfayı o dile Google Translate ile çevirir; kullanıcı dili değiştirirse de aynı şekilde davranır. */
   function askTr() {
     var sel = document.getElementById("lsel");
-    if (document.documentElement.getAttribute("data-l") === "tr" && typeof gt === "function") setTimeout(function () { gt("tr"); }, 600);
-    if (sel && !sel.dataset.autoTr) {
+    if (!sel) return;
+    if (sel.value && sel.value !== "en") setTimeout(function () { gt(sel.value); }, 600);
+    if (!sel.dataset.autoTr) {
       sel.dataset.autoTr = "1";
-      sel.addEventListener("change", function () { if (sel.value === "tr") setTimeout(function () { gt("tr"); }, 400); });
+      sel.addEventListener("change", function () {
+        if (sel.value !== "en") setTimeout(function () { gt(sel.value); }, 400);
+      });
     }
   }
   fetch("data/apps.json?v=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.json(); }).then(run).catch(function () {});
