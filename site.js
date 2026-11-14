@@ -58,6 +58,31 @@
       card.appendChild(p);
     });
   }
+  /* Yapıştırılan metni olduğu gibi göster: satır sonları, boşluklar ve paragraf aralıkları korunur.
+     Kısa, noktasız satırlar başlık, "*" ile başlayanlar liste olur. */
+  function renderPolicy(pb, text, name) {
+    var buf = [], ul = null;
+    function flush() {
+      if (!buf.length) return;
+      var p = el("p"); p.style.whiteSpace = "pre-wrap"; p.textContent = buf.join("\n");
+      pb.appendChild(p); buf = [];
+    }
+    String(text).split("\n").forEach(function (raw) {
+      var line = raw.split("{app}").join(name).replace(/\s+$/, "");
+      var tr = line.trim();
+      if (!tr) { flush(); ul = null; return; }
+      if (/^[*\-•]\s+/.test(tr)) {
+        flush();
+        if (!ul) { ul = el("ul"); pb.appendChild(ul); }
+        ul.appendChild(el("li", null, tr.replace(/^[*\-•]\s+/, "")));
+        return;
+      }
+      ul = null;
+      if (tr.length <= 60 && !/[.!?:;,]$/.test(tr)) { flush(); pb.appendChild(el("h4", null, tr)); return; }
+      buf.push(line.replace(/^\s+/, ""));
+    });
+    flush();
+  }
   function fillPolicy(pb, a, tpl) {
     while (pb.firstChild) pb.removeChild(pb.firstChild);
     var date = a.policy_date || tpl.updated;
@@ -68,13 +93,7 @@
     head.appendChild(document.createTextNode(" "));
     var m = el("a", null, "labsdevapps@gmail.com"); m.href = "mailto:labsdevapps@gmail.com"; head.appendChild(m);
     pb.appendChild(head);
-    (a.policy_text || tpl.text).split(/\n\s*\n/).forEach(function (block) {
-      var lines = block.split("\n").map(function (x) { return x.trim(); }).filter(Boolean);
-      if (!lines.length) return;
-      var text = lines.join(" ").split("{app}").join(a.name);
-      var isHeading = lines.length === 1 && text.length <= 60 && !/[.!?:;]$/.test(text);
-      pb.appendChild(el(isHeading ? "h4" : "p", null, text));
-    });
+    renderPolicy(pb, a.policy_text || tpl.text, a.name);
   }
   function article(a, tpl) {
     var art = el("article", "pv"); art.id = "pv-" + a.id;
