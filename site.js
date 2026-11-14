@@ -91,6 +91,13 @@
   function run(data) {
     var grid = document.querySelector("#apps .g"), tpl = data.policy_template, main = document.getElementById("pvw");
     var stamp = Date.now();
+    /* Silinen uygulamalar: sabit HTML'deki kart ve gizlilik sayfasını kaldır */
+    (data.deleted || []).forEach(function (id) {
+      var pv = document.getElementById("pv-" + id); if (pv) pv.remove();
+      document.querySelectorAll('.g .c img[src^="icons/' + id + '.png"]').forEach(function (im) {
+        var c = im.closest(".c"); if (c) c.remove();
+      });
+    });
     /* İkonlar: önbelleği aşmak için sürüm numarası ekle */
     document.querySelectorAll('img[src^="icons/"]').forEach(function (im) {
       im.src = im.getAttribute("src").split("?")[0] + "?v=" + stamp;

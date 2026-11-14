@@ -37,6 +37,7 @@ summary{cursor:pointer;font-weight:700}
     <div class="tabs">
       <button class="tab on" id="t-add">Yeni uygulama ekle</button>
       <button class="tab" id="t-edit">Uygulamayı güncelle</button>
+      <button class="tab" id="t-del">Uygulamayı sil</button>
     </div>
     <div id="panel"></div>
   </div>
@@ -110,10 +111,41 @@ function statusSelect(val,id){
 }
 function setMode(m){
   MODE=m;
-  $("t-add").classList.toggle("on",m==="add");$("t-edit").classList.toggle("on",m==="edit");
+  $("t-add").classList.toggle("on",m==="add");$("t-edit").classList.toggle("on",m==="edit");$("t-del").classList.toggle("on",m==="del");
   const p=$("panel");p.innerHTML="";
   if(m==="add") p.appendChild(addForm());
+  else if(m==="del") p.appendChild(deleteForm());
   else p.appendChild(editForm());
+}
+function deleteForm(){
+  const c=document.createElement("div");c.className="card";
+  c.innerHTML="<h3>Uygulamayı sil</h3><p>Bu işlem geri alınamaz. Silmek için sırasıyla token, uygulama adı ve onay cümlesi istenecek.</p>";
+  const l=document.createElement("label");l.textContent="Silinecek uygulama";
+  const sel=document.createElement("select");sel.id="d-sel";
+  sel.innerHTML='<option value="">— seçin —</option>'+DOC.apps.map(a=>'<option value="'+a.id+'">'+a.name.replace(/</g,"&lt;")+'</option>').join("");
+  c.append(l,sel);
+  const b=document.createElement("button");b.className="btn";b.style.background="#b3261e";b.textContent="Uygulamayı sil";
+  b.onclick=()=>{if(!sel.value){msg("Silinecek uygulamayı seçin",false);return}deleteApp(sel.value)};
+  c.appendChild(b);
+  return c;
+}
+async function deleteApp(id){
+  const a=DOC.apps.find(x=>x.id===id);if(!a){msg("Uygulama bulunamadı",false);return}
+  const t=prompt("1/3 — Silmek için GitHub token'ınızı yeniden girin:");if(t===null)return;
+  if(t.trim()!==TOKEN){msg("Token eşleşmiyor, silme iptal edildi",false);return}
+  const n=prompt('2/3 — Silinecek uygulamanın adını tam olarak yazın:\n"'+a.name+'"');if(n===null)return;
+  if(n.trim()!==a.name){msg("Uygulama adı eşleşmiyor, silme iptal edildi",false);return}
+  const q=prompt("3/3 — Son onay: aşağıdaki cümleyi aynen yazın:\nI want to delete this application");if(q===null)return;
+  if(q.trim()!=="I want to delete this application"){msg("Onay cümlesi eşleşmiyor, silme iptal edildi",false);return}
+  const d=JSON.parse(JSON.stringify(DOC));
+  d.apps=d.apps.filter(x=>x.id!==id);
+  d.deleted=[...new Set([...(d.deleted||[]),id])];
+  const ok=await commit("Uygulama sil: "+a.name,d);
+  if(ok){
+    try{const f=await gh("icons/"+id+".png");await gh("icons/"+id+".png",{method:"DELETE",body:JSON.stringify({message:"İkon sil: "+id,sha:f.sha})})}catch(e){}
+    msg("Uygulama silindi ✓ (birkaç dakika içinde sitede kaybolur)",true);
+    setMode("del");
+  }
 }
 function addForm(){
   const c=document.createElement("div");c.className="card";
@@ -187,6 +219,7 @@ async function addApp(){
   try{
     if(file) await uploadIcon(id,file);
     const d=JSON.parse(JSON.stringify(DOC));
+    d.deleted=(d.deleted||[]).filter(x=>x!==id);
     d.apps.push({id,name,icon:"icons/"+id+".png",tagline_en:$("n-en").value,store_url:$("n-store").value.trim(),status:$("n-status").value});
     if(await commit("Uygulama ekle: "+name,d)){["n-id","n-name","n-store","n-en"].forEach(x=>$(x).value="");$("n-icon").value=""}
   }catch(e){msg("Eklenemedi: "+e.message,false)}
@@ -196,6 +229,7 @@ $("tok").onkeydown=e=>{if(e.key==="Enter")login()};
 $("out").onclick=()=>{sessionStorage.removeItem("gh_token");location.reload()};
 $("t-add").onclick=()=>setMode("add");
 $("t-edit").onclick=()=>setMode("edit");
+$("t-del").onclick=()=>setMode("del");
 if(TOKEN){$("tok").value="";show()}
 </script>
 </body></html>
