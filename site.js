@@ -20,8 +20,12 @@
     var ac = el("div", "ac");
     if (a.status === "live" && a.store_url) {
       var gp = el("a", "gp"); gp.href = a.store_url; gp.target = "_blank"; gp.rel = "noopener";
-      var im = el("img", "gpb"); im.src = "https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png";
-      im.alt = "Get it on Google Play"; im.height = 52; gp.appendChild(im); ac.appendChild(gp);
+      /* Rozet: sayfadaki mevcut rozetin dilini ve boyutunu al (dil değişince setL hepsini günceller) */
+      var ref = document.querySelector("img.gpb");
+      var im = el("img", "gpb");
+      im.src = ref ? ref.getAttribute("src") : "https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png";
+      im.alt = ref ? ref.getAttribute("alt") : "Get it on Google Play";
+      gp.appendChild(im); ac.appendChild(gp);
     } else {
       var s = el("span", "soon"); bil("Coming soon", "Yakında").forEach(function (x) { s.appendChild(x); }); ac.appendChild(s);
     }
