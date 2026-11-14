@@ -60,8 +60,31 @@
   }
   function run(data) {
     var grid = document.querySelector("#apps .g"), tpl = data.policy_template, main = document.getElementById("pvw");
+    var stamp = Date.now();
+    /* İkonlar: önbelleği aşmak için sürüm numarası ekle */
+    document.querySelectorAll('img[src^="icons/"]').forEach(function (im) {
+      im.src = im.getAttribute("src").split("?")[0] + "?v=" + stamp;
+    });
+    /* Üstteki kayan ikon bandı: veriden yeniden üret (iki özdeş yarı, animasyon için) */
+    var mq = document.querySelector(".mq");
+    if (mq && data.apps.length) {
+      var half = document.createDocumentFragment();
+      var copies = Math.max(1, Math.ceil(8 / data.apps.length));
+      for (var r = 0; r < copies; r++) {
+        data.apps.forEach(function (a) {
+          var im = el("img"); im.src = a.icon + "?v=" + stamp; im.alt = ""; im.width = 60; im.height = 60;
+          half.appendChild(im);
+        });
+      }
+      mq.innerHTML = "";
+      mq.appendChild(half.cloneNode(true));
+      mq.appendChild(half);
+    }
+    /* Uygulama sayısı */
+    var cnt = document.querySelector(".st b");
+    if (cnt) cnt.textContent = data.apps.length;
     data.apps.forEach(function (a) {
-      if (grid && !grid.querySelector('img[src="' + a.icon + '"]')) grid.appendChild(card(a));
+      if (grid && !grid.querySelector('img[src^="' + a.icon + '"]')) grid.appendChild(card(a));
       var pv = document.getElementById("pv-" + a.id);
       if (!pv && main) { main.appendChild(article(a, tpl)); PV.push(a.id); }
       else if (pv && a.policy_text) fillPolicy(pv.querySelector(".pb"), a, tpl);
