@@ -40,7 +40,9 @@
       "tagline_en": "Prepare lesson plans and files quickly.",
       "tagline_tr": "Ders planlarını ve dosyaları hızlıca hazırlayın.",
       "store_url": "https://play.google.com/store/apps/details?id=com.devsoftware.bephazirlama",
-      "status": "live"
+      "status": "live",
+      "policy_text": "BEP Hazırlama – Privacy Policy \nLast updated: November 19, 2026\nGeneral\nBEP Hazırlama is developed by Labs Dev Apps (\"we\", \"us\"). The app works offline, except for loading advertisements, which requires an internet connection.\nAll data you create in the app is stored locally on your device. We do not send it to our servers or to any third party.\nData collection\nWe do not require an account, and we do not collect, store, or share your personal data. All processing happens locally on your device.\nAdvertising (Google AdMob)\nThe app may show ads provided by Google AdMob. To serve and measure ads, Google and its partners may collect certain information from your device, such as the advertising ID, IP address, device and operating system information, and ad interaction data. We do not access or store this data. It is processed under Google's policies:\nhttps://policies.google.com/technologies/partner-sites\nhttps://policies.google.com/privacy\nWhere consent is required (for example in the European Economic Area and the United Kingdom), the app asks for your consent before requesting ads. You can reset your advertising ID or opt out of ads personalization in your Android settings (Settings > Privacy > Ads, or Settings > Google > Ads).\nChildren's privacy\nThe app is not directed at children under 13, and we do not knowingly collect personal information from children.\nChanges\nWe may update this policy from time to time. The updated version will be published at this same address with a new date.\nContact\nFor questions or feedback about privacy: labsdevapps@gmail.com",
+      "policy_date": "2026-11-18"
     },
     {
       "id": "pdf-reader",
