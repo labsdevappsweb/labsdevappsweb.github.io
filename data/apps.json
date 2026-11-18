@@ -76,6 +76,14 @@
       "status": "soon",
       "policy_text": "**Privacy Policy – Labs Dev Hub**\nLast updated: November 14, 2026\n\nLabs Dev Hub is a catalog app that shows the Android apps published by Labs Dev Apps.\n\n**Information we collect:** We do not collect, store or share personal information. The app does not require an account.\n\n**Internet access:** The app loads its content from our website. When you use the language translation feature, the page may load Google Translate from Google's servers. Google's privacy policy applies: https://policies.google.com/privacy\n\n**Permissions:** The app only uses the internet permission.\n\n**Children:** The app is not directed to children under 13, and we do not knowingly collect information from children.\n\n**Changes:** We may update this policy and will change the date above.\n\n**Contact:** labsdevapps@gmail.com",
       "policy_date": "2026-11-14"
+    },
+    {
+      "id": "aiappforge",
+      "name": "AI App Forge",
+      "icon": "icons/aiappforge.png",
+      "tagline_en": "AI App Forge lets you turn HTML code into an Android APK or AAB directly on your device.",
+      "store_url": "",
+      "status": "soon"
     }
   ],
   "deleted": [
