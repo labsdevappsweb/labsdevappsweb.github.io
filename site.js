@@ -11,12 +11,7 @@
     var d = new Date(iso + "T00:00:00Z");
     return d.toLocaleDateString(loc, { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
   }
-  function card(a) {
-    var c = el("div", "c"), t = el("div", "t"), img = el("img");
-    img.src = a.icon; img.alt = ""; img.width = 72; img.height = 72;
-    var h = el("h3", null, a.name); h.setAttribute("translate", "no");
-    t.appendChild(img); t.appendChild(h); c.appendChild(t);
-    c.appendChild(el("p", null, a.tagline_en));
+  function actions(a) {
     var ac = el("div", "ac");
     if (a.status === "live" && a.store_url) {
       var gp = el("a", "gp"); gp.href = a.store_url; gp.target = "_blank"; gp.rel = "noopener";
@@ -29,6 +24,15 @@
     } else {
       var s = el("span", "soon"); bil("Coming soon", "Yakında").forEach(function (x) { s.appendChild(x); }); ac.appendChild(s);
     }
+    return ac;
+  }
+  function card(a) {
+    var c = el("div", "c"), t = el("div", "t"), img = el("img");
+    img.src = a.icon; img.alt = ""; img.width = 72; img.height = 72;
+    var h = el("h3", null, a.name); h.setAttribute("translate", "no");
+    t.appendChild(img); t.appendChild(h); c.appendChild(t);
+    c.appendChild(el("p", null, a.tagline_en));
+    var ac = actions(a);
     c.appendChild(ac);
     attachCopy(c, a);
     return c;
@@ -142,7 +146,13 @@
     var gone = data.deleted || [];
     data.apps = data.apps.filter(function (a) { return gone.indexOf(a.id) < 0; });
     data.apps.forEach(function (a) {
-      if (grid && !grid.querySelector('img[src^="' + a.icon + '"]')) { grid.appendChild(card(a)); added = true; }
+      var ex = grid && grid.querySelector('.c .t img[src^="' + a.icon + '"]');
+      if (grid && !ex) { grid.appendChild(card(a)); added = true; }
+      else if (ex) {
+        /* Sabit karttaki "Coming soon" / Play rozeti durumunu veriye göre güncelle */
+        var oc = ex.closest(".c"), oa = oc && oc.querySelector(".ac");
+        if (oa) oa.parentNode.replaceChild(actions(a), oa);
+      }
       var pv = document.getElementById("pv-" + a.id);
       if (!pv && main) { main.appendChild(article(a, tpl)); PV.push(a.id); added = true; }
       else if (pv && a.policy_text) fillPolicy(pv.querySelector(".pb"), a, tpl);
